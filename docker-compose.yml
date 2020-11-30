@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: processor_service
+    volumes:
+      - .:/processor_service
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+
+  celery-worker:
+    build: .
+    command: bash -c "celery -A atlan worker"
+    container_name: processor_service
+    volumes:
+      - .:/processor_service
