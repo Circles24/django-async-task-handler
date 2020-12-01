@@ -7,10 +7,19 @@ services:
     container_name: processor_service
     volumes:
       - .:/processor_service
-    ports:
+    ports: 
       - "8000:8000"
-    expose:
-      - "8000"
+
+  rabbitmq:
+    image: rabbitmq:3.6.0-management
+    container_name: rabbitmq
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   celery-worker:
     build: .
