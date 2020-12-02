@@ -17,6 +17,3 @@ ADD . /processor_service/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
-# RUN apt-get update && apt upgrade -y
-# RUN apt install rabbitmq-server -y
-# RUN rabbitmq-server

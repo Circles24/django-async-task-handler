@@ -10,8 +10,8 @@ def create_task(request):
         serializer = TaskMSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            serializer.start_async_processing()
-            return Response({'msg':'operation successful'}, 200)
+            id = serializer.start_async_processing()
+            return Response({'msg':'operation successful', 'id': id}, 200)
         else :
             return Response(serializer.errors, 400)
     except Exception as ex:

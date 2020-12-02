@@ -120,4 +120,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/%2F'

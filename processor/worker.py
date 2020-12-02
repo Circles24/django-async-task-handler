@@ -1,10 +1,12 @@
-from celery import shared_task
+from queue import Queue
 from .models import Task
 import time
 from django.utils import timezone
+import threading
 
+WORKER_THREADS = 10
+task_queue = Queue()
 
-@shared_task
 def process_task(task_id):
     # dummy loop to demonstrate large operation consisting of multiple atomic operations
     
@@ -29,3 +31,16 @@ def process_task(task_id):
     t.is_completed = True
     t.save()
     print(f'task::{task_id} completed')
+
+
+def task_assigner():
+    while True:
+        task_id = task_queue.get()
+        process_task(task_id)
+
+def bootstrap_workers():
+    for i in range(WORKER_THREADS):
+        worker_thread = threading.Thread(target=task_assigner, daemon=True)
+        worker_thread.start()
+
+

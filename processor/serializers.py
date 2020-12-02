@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Task
-from atlan.celery import app
-from .tasks import process_task
+from .worker import task_queue
 
 class TaskMSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,7 +8,8 @@ class TaskMSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def start_async_processing(self):
-        process_task.delay(self.data['id'])
+        task_queue.put(self.data['id'])
+        return self.data['id']
 
 class TaskSerializer(serializers.Serializer):
     id = serializers.IntegerField()
